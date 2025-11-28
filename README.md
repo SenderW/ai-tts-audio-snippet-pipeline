@@ -1,31 +1,29 @@
 # AI TTS Audio Snippet Pipeline
 
-Small Flask app that uses OpenAI text to speech to insert spoken snippets into an existing MP3 file. Typical use cases are automatic intros, mid roll calls to action, and outros for podcasts, promos, or training audio.
+Small Flask app that uses OpenAI text to speech to insert spoken snippets into existing MP3 files. It is meant as a simple example for AI based content automation for podcasts, marketing audio or training material.
 
 ## What this tool does
 
-- Accepts an uploaded audio file (for example MP3).
+- Accepts an uploaded MP3 file.
 - Accepts at least four text lines:
   - Intro
   - First mid roll
   - Second mid roll
   - Outro
-- Uses OpenAI text to speech to generate four short speech snippets.
-- Inserts these snippets into the audio:
-  - Intro before the track
+- Uses OpenAI text to speech to generate four speech snippets.
+- Inserts these snippets into the track at fixed positions:
+  - Intro before the original audio
   - First mid roll after the first quarter
   - Second mid roll after the second quarter
   - Outro at the end
-- Exports a new MP3 file with simple ID3 metadata.
-
-This is a compact example of AI driven content automation for audio production.
+- Exports a new MP3 file and writes simple ID3 metadata.
 
 ## Architecture
 
-- **Framework**: Flask
-- **Audio processing**: pydub
-- **Metadata**: mutagen
-- **Text to speech**: OpenAI Audio API (`client.audio.speech.create` with `gpt-4o-mini-tts` or similar)
+- Framework: Flask
+- Audio processing: pydub
+- Metadata: mutagen
+- Text to speech: OpenAI Audio API (`client.audio.speech.create` with `gpt-4o-mini-tts` or similar model)
 
 ## Setup
 
