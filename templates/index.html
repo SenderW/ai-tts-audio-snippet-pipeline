@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI TTS Audio Snippet Pipeline</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #343a40;
+        }
+
+        h2 {
+            color: #343a40;
+            margin-top: 30px;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 760px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .checkbox-row input {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        ul {
+            padding-left: 18px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>AI TTS Audio Snippet Pipeline</h1>
+
+    <p class="note">
+        This small tool takes an MP3 file, generates four text to speech snippets and inserts them into the audio.
+        It is a simple example for AI based automation in podcast and audio workflows.
+    </p>
+
+    <h2>How this tool works</h2>
+    <p>
+        The server expects at least four lines of text. The first four non empty lines are used as:
+    </p>
+    <ul>
+        <li>Line 1 - intro before the audio</li>
+        <li>Line 2 - first mid roll after the first quarter of the track</li>
+        <li>Line 3 - second mid roll after the second quarter of the track</li>
+        <li>Line 4 - outro after the end of the track</li>
+    </ul>
+    <p>
+        For each of these lines the app calls OpenAI text to speech, creates short speech snippets and joins them
+        with your uploaded MP3 file. Then it writes simple ID3 tags and returns a new MP3 file for download.
+    </p>
+
+    <form action="/process" method="post" enctype="multipart/form-data">
+        <label for="audioFile">Upload MP3 file (required)</label>
+        <input id="audioFile" type="file" name="audioFile" accept=".mp3" required>
+
+        <label for="texts">Text snippets (one snippet per line, at least 4 lines)</label>
+        <textarea id="texts" name="texts" rows="8"
+                  placeholder="Intro text&#10;Mid roll 1&#10;Mid roll 2&#10;Outro text"
+                  required></textarea>
+
+        <p class="note">
+            The app will use only the first four non empty lines. Additional lines are ignored.
+        </p>
+
+        <label for="metaTitle">MP3 title tag (optional)</label>
+        <input id="metaTitle" type="text" name="metaTitle"
+               placeholder="Processed audio with AI speech snippets">
+
+        <label for="metaArtist">MP3 artist tag (optional)</label>
+        <input id="metaArtist" type="text" name="metaArtist"
+               placeholder="AI audio snippet pipeline">
+
+        <label for="metaWebsite">Website link in comment tag (optional)</label>
+        <input id="metaWebsite" type="url" name="metaWebsite"
+               placeholder="https://example.com">
+
+        <div class="checkbox-row">
+            <input id="agreeTerms" type="checkbox" name="agreeTerms" required>
+            <label for="agreeTerms">
+                I confirm that I am responsible for all copyright, license and consent issues for the audio I upload.
+            </label>
+        </div>
+
+        <p class="note">
+            This tool modifies audio files that you upload. Check the box above only if you own the rights or have
+            permission to process the material.
+        </p>
+
+        <button type="submit">Process audio</button>
+    </form>
+</div>
+</body>
+</html>
